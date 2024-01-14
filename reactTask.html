@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    <div id="root"></div>
+</body>
+
+<script crossorigin src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+    function TimeConverter() {
+        const [hours, setHours] = React.useState('');
+        const [minutes, setMinutes] = React.useState('');
+        const [isHourToMinuteMode, setHourToMinuteMode] = React.useState(true);
+
+        const handleHoursChange = (e) => {
+            const inputHours = e.target.value;
+            setHours(inputHours);
+            if (isHourToMinuteMode) {
+                const convertedMinutes = inputHours * 60;
+                setMinutes(convertedMinutes);
+            }
+        };
+
+        const handleMinutesChange = (e) => {
+            const inputMinutes = e.target.value;
+            setMinutes(inputMinutes);
+            if (!isHourToMinuteMode) {
+                const convertedHours = inputMinutes / 60;
+                setHours(convertedHours);
+            }
+        };
+
+        const handleConvertClick = () => {
+            setHourToMinuteMode((prevMode) => !prevMode);
+            setHours('');
+            setMinutes('');
+        };
+
+        return (
+            <div>
+                <div>
+                    {isHourToMinuteMode ? (
+                        <div>
+                            <h1>Hours to Minutes</h1>
+                            <label>Hours:</label>
+                            <input type="number" value={hours} onChange={handleHoursChange} />
+                            <label>Minutes:</label>
+                            <input
+                                type="number"
+                                value={minutes}
+                                disabled={isHourToMinuteMode}
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            <h1>Minutes to Hours</h1>
+                            <label>Minutes:</label>
+                            <input type="number" value={minutes} onChange={handleMinutesChange} />
+                            <label>Hours:</label>
+                            <input
+                                type="number"
+                                value={hours}
+                                disabled={!isHourToMinuteMode}
+                            />
+                        </div>
+                    )}
+                </div>
+                <button onClick={handleConvertClick}>Convert</button>
+            </div>
+        );
+    }
+
+    const root = document.getElementById("root");
+    ReactDOM.render(<TimeConverter />, root);
+</script>
+
+</html>
